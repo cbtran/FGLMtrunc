@@ -1,5 +1,4 @@
-
-#' @useDynLib truncatedFGLM
+#' @useDynLib FGLMtrunc
 gcvSmoothlinear <- function(Y, scalar_mat, xi_mat, M_aug, denseGrid, nbasis, figure = F) {
 
   n = length(Y)
@@ -23,7 +22,7 @@ gcvSmoothlinear <- function(Y, scalar_mat, xi_mat, M_aug, denseGrid, nbasis, fig
 
 
 
-#' @useDynLib truncatedFGLM
+#' @useDynLib FGLMtrunc
 #' @importFrom glmnet glmnet
 gcvSmoothLogistic <- function(Y, scalar_mat, xi_mat, M_aug, denseGrid, nbasis, figure = F) {
 

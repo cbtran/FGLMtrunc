@@ -1,4 +1,4 @@
-#' @useDynLib truncatedFGLM
+#' @useDynLib FGLMtrunc
 truncatedLinearModelCpp <- function(Y,
                                     X.curves,
                                     S,
@@ -48,10 +48,9 @@ truncatedLinearModelCpp <- function(Y,
   }
 
   registerDoParallel(numCores)
-  stopImplicitCluster()
-
-  esti_list = foreach(i = 1:nlambda_s, .packages = c("truncatedFGLM")) %dopar%
+  esti_list = foreach(i = 1:nlambda_s, .packages = c("FGLMtrunc")) %dopar%
     linearSolutionPath(Y, scalar_mat, xi_mat, nbasis, M_aug, lambda_s_seq[i], weight, degree, p.scalar, precision)
+  on.exit(stopImplicitCluster())
 
   lambda_t_sse_vec = sapply(esti_list, get, x="bic")
   s_index = which.min(lambda_t_sse_vec)

@@ -1,4 +1,4 @@
-#' @useDynLib truncatedFGLM
+#' @useDynLib FGLMtrunc
 #' @importFrom glmnet glmnet
 logisticSolutionPath <- function(
   Y,

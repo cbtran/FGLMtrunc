@@ -1,15 +1,15 @@
-#' Plot functional parameters \eqn{\beta} from a \code{truncatedFGLM} object
+#' @title Plot functional parameters \eqn{\beta} from a \code{FGLMtrunc} object
 #'
-#' Plot functional parameters \eqn{\beta} as a function of \eqn{t} for a fitted
-#' \code{truncatedFGLM} object.
+#' @description Plot functional parameters \eqn{\beta} as a function of \eqn{t} for a fitted
+#' \code{FGLMtrunc} object.
 #'
-#' @param x fitted \code{truncatedFGLM} object
+#' @param x fitted \code{FGLMtrunc} object
 #' @param include_smooth If TRUE, smoothing estimate without truncation of \eqn{\beta} is plotted.
 #' @param \dots additional plot arguments
-#' @method plot truncatedFGLM
+#' @method plot FGLMtrunc
 #' @importFrom graphics legend lines title
 #' @export
-plot.truncatedFGLM <- function(x, include_smooth=TRUE, ...){
+plot.FGLMtrunc <- function(x, include_smooth=TRUE, ...){
   plot(x$grid, x$beta.truncated, col="red", type="l",
        main=paste("Truncation point:", x$trunc.point), xlab="", ylab="", ...)
   title(xlab=expression(t), ylab=expression(hat(beta)(t)), line=2)

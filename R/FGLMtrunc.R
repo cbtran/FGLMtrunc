@@ -1,6 +1,6 @@
-#' Fit a truncated Functional Generalized Linear Model
+#' @title Fit a truncated Functional Generalized Linear Model
 #'
-#' @description Fit a truncated Functional Generalized Linear Model using nested group lasso penalty.
+#' @description Fit a truncated functional linear or logistic regression model using nested group lasso penalty.
 #' The solution path is computed efficiently using active set algorithm with warm start. Optimal tuning parameters (\eqn{\lambda_s, \lambda_t})
 #' are chosen by Bayesian information criterion (BIC).
 #'
@@ -9,8 +9,11 @@
 #' the number of B-spline basis equals \code{q + k}. Without truncation (\eqn{\lambda}_t=0), the function returns smoothing estimate that is
 #' equivalent to the method of Cardot and Sarda (2005), and optimal smoothing parameter is chosen by Generalized Cross Validation (GCV).
 #'
+#' ## Details on \code{family}
+#' The model can work with Gaussian or Bernoulli responses. If \code{family="gaussian"}, identity link is used. If \code{family="binomial"}, logit link is used.
+#'
 #' ## Details on scalar predictors
-#' \code{truncatedFGLM} allows using scalar predictors together with functional predictors. If scalar predictors are used, their estimated coefficients
+#' \code{FGLMtrunc} allows using scalar predictors together with functional predictors. If scalar predictors are used, their estimated coefficients
 #' are included in \code{alpha} form fitted model.
 #'
 #' @param Y \code{n}-by-\code{1} vector of response.
@@ -20,7 +23,7 @@
 #' @param S (optional) \code{n}-by-\code{s} matrix of scalar predictors. Binary variable should be coded as numeric rather than factor.
 #' @param grid A sequence of \code{p} points at which \code{X} is recorded, including both boundaries \code{0} and \code{T}. If not
 #' specified, an equally spaced sequence of length p between 0 and 1 will be used.
-#' @param family Choice of link function for the model.
+#' @param family Choice of exponential family for the model. The function then uses corresponding canonical link function to fit model.
 #' @param degree Degree of the piecewise polynomial. Default 3 for cubic splines.
 #' @param nbasis Number of B-spline basis.
 #' If \code{knots} is unspecified, the function choose \code{nbasis - degree - 1} **internal** knots at suitable quantiles of \code{grid}.
@@ -52,7 +55,7 @@
 #'
 #' @seealso \link[splines2]{bSpline} from \link[splines2]{splines2} R package for usage of B-spline basis.
 #'
-#' @useDynLib truncatedFGLM
+#' @useDynLib FGLMtrunc
 #' @import stats
 #' @importFrom graphics abline
 #' @import foreach
@@ -66,7 +69,7 @@
 #' Y_linear = LinearExample$Y
 #' Xcurves_linear = LinearExample$X.curves
 #' # Used num.cores=2  for CRAN check
-#' fit1 = truncatedFGLM(Y_linear, Xcurves_linear, nbasis = 50, num.cores=2)
+#' fit1 = fglm_trunc(Y_linear, Xcurves_linear, nbasis = 50, num.cores=2)
 #' print(fit1)
 #' plot(fit1)
 #'
@@ -74,12 +77,12 @@
 #' data(LogisticExample)
 #' Y_logistic = LogisticExample$Y
 #' Xcurves_logistic = LogisticExample$X.curves
-#' fit2 = truncatedFGLM(Y_logistic, Xcurves_logistic, family="binomial", nbasis = 50, num.cores=2)
+#' fit2 = fglm_trunc(Y_logistic, Xcurves_logistic, family="binomial", nbasis = 50, num.cores=2)
 #' print(fit2)
 #' plot(fit2)
 #'
 #' @export
-truncatedFGLM <- function(
+fglm_trunc <- function(
   Y,
   X.curves,
   S=NULL,
@@ -128,7 +131,7 @@ truncatedFGLM <- function(
   }
   fit$family = family
   fit$call = this.call
-  class(fit) = "truncatedFGLM"
+  class(fit) = "FGLMtrunc"
 
   return(fit)
 }

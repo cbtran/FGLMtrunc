@@ -1,4 +1,4 @@
-#' @useDynLib truncatedFGLM
+#' @useDynLib FGLMtrunc
 linearSolutionPath <- function(
   Y,
   scalar_mat,

@@ -92,7 +92,7 @@ void acceleratedGD_linear(const arma::vec& Y,
   int p = betaA.n_elem;
   int iter = 0;
   double mu = deltaPre/q_A; // when mu is smaller, the smooth begins later, smooth fun is the same with original fun
-  arma::vec w_aux = betaA;   //w_0
+  arma::vec w_aux = betaA;  //w_0
 
   Rcpp::List L_C_res = lipschitzL_C_linear(n, X_active, M_mat_active, mu, q_A, lambda_s, lambda_t, weight);
   double Lc = L_C_res[0];
@@ -104,8 +104,8 @@ void acceleratedGD_linear(const arma::vec& Y,
   arma::vec grad = -X_active.t() * (Y - X_active * betaA) / n + lambda_s * (M_mat_active * betaA) + arma::join_cols(zero_V, C.t() * alpha_star);
   arma::vec beta_old;
   double theta;
-  while (arma::norm(grad, "fro") > convergePre & iter < maxIter) { // maxIter
-    beta_old = betaA;  //the beta^t
+  while ((arma::norm(grad, "fro") > convergePre) && (iter < maxIter)) {
+    beta_old = betaA; 
     betaA = w_aux - stepsize*grad;
 
     alpha_star = alpha_star_linear(w_aux.tail(p-p_scalar-1), mu, weight, q_A, lambda_t);
@@ -116,7 +116,7 @@ void acceleratedGD_linear(const arma::vec& Y,
     iter += 1;
   }
   int iter_2 = 1;
-  while (arma::norm(grad, "fro") > convergePre & iter_2 < maxIter) {
+  while ((arma::norm(grad, "fro") > convergePre) && (iter_2 < maxIter)) {
     grad = - (X_active.t()) * (Y - X_active * betaA) / n + lambda_s * (M_mat_active * betaA) + arma::join_cols(zero_V, C.t() * alpha_star);
     betaA -= stepsize*grad;
     iter_2 += 1;
@@ -129,7 +129,7 @@ arma::vec penalty_d2(const arma::vec& beta_A,
                          int q_A,
                          const arma::vec& weight,
                          int degree) {
-  //int p = beta_A.n_elem;
+
   arma::vec beta_rm_scalar = beta_A.tail(q_A);
   arma::vec group_norm_A(q_A);
   arma::vec dPe2_vec_A(q_A);
@@ -137,8 +137,6 @@ arma::vec penalty_d2(const arma::vec& beta_A,
     group_norm_A[i] = arma::norm(beta_rm_scalar.subvec(i,q_A-1), "fro");
   }
   for (int i = 0; i<q_A; i++) {
-    //arma::vec temp_group_norm_A = group_norm_A.head(i+1);
-    //arma::vec temp_weight = weight.head(i+1);
     dPe2_vec_A[i] = pow(arma::sum(beta_rm_scalar[i] /  group_norm_A.head(i+1) % weight.head(i+1)), 2);
   }
 
@@ -147,7 +145,7 @@ arma::vec penalty_d2(const arma::vec& beta_A,
   arma::vec temp(degree);
   temp.fill(weight_total_sum);
   arma::vec dPe2_vec_notA = arma::pow(arma::join_cols(arma::cumsum(weight(idx)),
-                                                      temp),2);
+                                                      temp), 2);
   arma::vec res = arma::cumsum(arma::join_cols(dPe2_vec_A,
                                                dPe2_vec_notA));
   return(res);
@@ -180,8 +178,8 @@ Rcpp::List linearpiecePathCpp (const arma::vec& Y,
   arma::mat beta_A_mat(beta_A.n_rows, 1);
   beta_A_mat.col(0) = beta_A;
 
-  arma::vec dl_part2 = lambda_s * M_aug * arma::join_cols(beta_A, arma::vec(scalar_mat.n_cols - d_active, arma::fill::zeros)); // beta*M*beta/2
-  arma::vec dl_part1 = scalar_mat.t() * (Y - X_active * beta_A) / n; // sum l2/2n
+  arma::vec dl_part2 = lambda_s * M_aug * arma::join_cols(beta_A, arma::vec(scalar_mat.n_cols - d_active, arma::fill::zeros));
+  arma::vec dl_part1 = scalar_mat.t() * (Y - X_active * beta_A) / n; 
   int p = dl_part1.n_elem;
   arma::vec diff_v = arma::pow(dl_part1 - dl_part2, 2);
 
@@ -244,17 +242,6 @@ Rcpp::NumericVector compute_df (const Rcpp::NumericVector& d_active_seq,
 }
 
 
-
-/*
- *
- *
- *
- *
- *
- *
- *
- *
- */
 
 // [[Rcpp::export]]
 Rcpp::List logisticSmPenalty(const arma::vec& Y,
@@ -392,11 +379,11 @@ Rcpp::List logisticpiecePathCpp (const arma::vec& Y,
   arma::mat beta_A_mat(beta_A.n_rows, 1);
   beta_A_mat.col(0) = beta_A;
 
-  arma::vec dl_part2 = lambda_s * (M_aug * arma::join_cols(beta_A, arma::vec(scalar_mat.n_cols - d_active, arma::fill::zeros))); // beta*M*beta/2
+  arma::vec dl_part2 = lambda_s * (M_aug * arma::join_cols(beta_A, arma::vec(scalar_mat.n_cols - d_active, arma::fill::zeros))); 
   arma::vec theta_vec = X_active * beta_A;
   arma::vec b_prime = arma::exp(theta_vec)/(1. + arma::exp(theta_vec));
 
-  arma::vec dl_part1 = scalar_mat.t() * (Y - b_prime) /n; // sum l2/2n
+  arma::vec dl_part1 = scalar_mat.t() * (Y - b_prime) /n; 
   int p = dl_part1.n_elem;
   arma::vec diff_v = arma::pow(dl_part1 - dl_part2, 2);
   arma::rowvec dL_group = arma::conv_to<arma::rowvec>::from( arma::sqrt(arma::cumsum( diff_v.tail(p-p_scalar-1) )) );

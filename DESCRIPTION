@@ -1,6 +1,8 @@
-Package: truncatedFGLM
-Title: Truncated Functional Generalized Linear Model
+Package: FGLMtrunc
+Title: Truncated Functional Generalized Linear Models
 Version: 0.0.0.9000
+Maintainer: Chau Tran <chautran@ucsb.edu>
+Author: Xi Liu
 Authors@R: c(
               person("Xi", "Liu", role = c("aut")),
               person("Chau", "Tran", email = "chautran@ucsb.edu", role = c("aut", "cre")),
@@ -9,7 +11,7 @@ Description: An implementation of the methodologies described in Xi Liu, Afshin 
                 truncated functional linear and truncated functional logistic regression models.
 License: GPL-2
 Depends: R (>= 3.6.0)
-Imports: Rcpp, foreach, glmnet, splines2, doParallel
+Imports: foreach, glmnet, splines2, doParallel
 LinkingTo: Rcpp, RcppArmadillo
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

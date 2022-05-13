@@ -2,22 +2,22 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 linearSmPenalty <- function(Y, scalar_mat, M_aug, lambda_s) {
-    .Call('_truncatedFGLM_linearSmPenalty', PACKAGE = 'truncatedFGLM', Y, scalar_mat, M_aug, lambda_s)
+    .Call('_FGLMtrunc_linearSmPenalty', PACKAGE = 'FGLMtrunc', Y, scalar_mat, M_aug, lambda_s)
 }
 
 linearpiecePathCpp <- function(Y, n, scalar_mat, M_aug, warmStart, nbasis, weight, lambda_s, lambdaStart, d_active, p_scalar, degree, precision = 1e-3) {
-    .Call('_truncatedFGLM_linearpiecePathCpp', PACKAGE = 'truncatedFGLM', Y, n, scalar_mat, M_aug, warmStart, nbasis, weight, lambda_s, lambdaStart, d_active, p_scalar, degree, precision)
+    .Call('_FGLMtrunc_linearpiecePathCpp', PACKAGE = 'FGLMtrunc', Y, n, scalar_mat, M_aug, warmStart, nbasis, weight, lambda_s, lambdaStart, d_active, p_scalar, degree, precision)
 }
 
 compute_df <- function(d_active_seq, scalar_mat, M_aug, lambda_s, n) {
-    .Call('_truncatedFGLM_compute_df', PACKAGE = 'truncatedFGLM', d_active_seq, scalar_mat, M_aug, lambda_s, n)
+    .Call('_FGLMtrunc_compute_df', PACKAGE = 'FGLMtrunc', d_active_seq, scalar_mat, M_aug, lambda_s, n)
 }
 
 logisticSmPenalty <- function(Y, scalar_mat, M_aug, lambda_s, warmstart, precision = 1e-6) {
-    .Call('_truncatedFGLM_logisticSmPenalty', PACKAGE = 'truncatedFGLM', Y, scalar_mat, M_aug, lambda_s, warmstart, precision)
+    .Call('_FGLMtrunc_logisticSmPenalty', PACKAGE = 'FGLMtrunc', Y, scalar_mat, M_aug, lambda_s, warmstart, precision)
 }
 
 logisticpiecePathCpp <- function(Y, n, scalar_mat, M_aug, warmStart, nbasis, weight, lambda_s, lambdaStart, d_active, p_scalar, degree, precision = 1e-3) {
-    .Call('_truncatedFGLM_logisticpiecePathCpp', PACKAGE = 'truncatedFGLM', Y, n, scalar_mat, M_aug, warmStart, nbasis, weight, lambda_s, lambdaStart, d_active, p_scalar, degree, precision)
+    .Call('_FGLMtrunc_logisticpiecePathCpp', PACKAGE = 'FGLMtrunc', Y, n, scalar_mat, M_aug, warmStart, nbasis, weight, lambda_s, lambdaStart, d_active, p_scalar, degree, precision)
 }
 

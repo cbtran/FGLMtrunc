@@ -1,22 +1,22 @@
-#' Make predictions from \code{truncatedFGLM} fitted model
+#' @title Make predictions from \code{FGLMtrunc} fitted model
 #'
-#' This function returns truncated estimate of linear predictors, fitted values, and functional parameter \eqn{\beta}
-#' for a fitted \code{truncatedFGLM} object.
+#' @description This function returns truncated estimate of linear predictors, fitted values, and functional parameter \eqn{\beta}
+#' for a fitted \code{FGLMtrunc} object.
 #'
 #'
-#' @param object fitted \code{truncatedFGLM} object
+#' @param object fitted \code{FGLMtrunc} object
 #' @param newX.curves Matrix of new values for functional predictors \code{X.curves}.
 #' @param newS Matrix of new values for scalar predictors \code{S}.
 #' @param type Type of prediction. For logistic regression (\code{family = "binomial"}), \code{type="link"} gives the linear
 #' predictors, which is log-odds, and \code{type="response"} gives the predicted probabilities.
 #' For linear regression (\code{family = "gaussian"}), both \code{type="link"} and  \code{type="response"} give fitted values.
 #' For both linear regression and logistic regression, \code{type="coefficients"} gives truncated estimate of functional parameter \eqn{\beta}.
-#' @param \dots additional predict arguments (Not applicable for truncatedFGLM)
+#' @param \dots additional predict arguments (Not applicable for FGLMtrunc)
 #' @return Predictions depends on chosen \code{type}.
 #' @seealso \link[stats]{predict.glm}.
-#' @method predict truncatedFGLM
+#' @method predict FGLMtrunc
 #' @export
-predict.truncatedFGLM <- function (object, newX.curves, newS=NULL, type = c("link", "response", "coefficients"), ...) {
+predict.FGLMtrunc <- function (object, newX.curves, newS=NULL, type = c("link", "response", "coefficients"), ...) {
   type = match.arg(type, type, several.ok = F)
 
   if(missing(object)) {

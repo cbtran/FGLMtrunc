@@ -1,6 +1,6 @@
-#' Simulated data for functional linear regression.
+#' @title Simulated data for functional linear regression.
 #'
-#' Randomly generated data with Gaussian responses for functional linear regression example follows Case I from Liu et. al. (2022).
+#' @description Randomly generated data with Gaussian responses for functional linear regression example follows Case I from Liu et. al. (2022).
 #'
 #' @name LinearExample
 #' @docType data

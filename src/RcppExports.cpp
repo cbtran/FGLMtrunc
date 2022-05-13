@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // linearSmPenalty
 Rcpp::List linearSmPenalty(const arma::vec& Y, const arma::mat& scalar_mat, const arma::mat& M_aug, double lambda_s);
-RcppExport SEXP _truncatedFGLM_linearSmPenalty(SEXP YSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP lambda_sSEXP) {
+RcppExport SEXP _FGLMtrunc_linearSmPenalty(SEXP YSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP lambda_sSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -27,7 +27,7 @@ END_RCPP
 }
 // linearpiecePathCpp
 Rcpp::List linearpiecePathCpp(const arma::vec& Y, int n, const arma::mat& scalar_mat, const arma::mat& M_aug, const arma::vec& warmStart, int nbasis, const arma::vec& weight, double lambda_s, double lambdaStart, int d_active, int p_scalar, int degree, double precision);
-RcppExport SEXP _truncatedFGLM_linearpiecePathCpp(SEXP YSEXP, SEXP nSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP warmStartSEXP, SEXP nbasisSEXP, SEXP weightSEXP, SEXP lambda_sSEXP, SEXP lambdaStartSEXP, SEXP d_activeSEXP, SEXP p_scalarSEXP, SEXP degreeSEXP, SEXP precisionSEXP) {
+RcppExport SEXP _FGLMtrunc_linearpiecePathCpp(SEXP YSEXP, SEXP nSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP warmStartSEXP, SEXP nbasisSEXP, SEXP weightSEXP, SEXP lambda_sSEXP, SEXP lambdaStartSEXP, SEXP d_activeSEXP, SEXP p_scalarSEXP, SEXP degreeSEXP, SEXP precisionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -50,7 +50,7 @@ END_RCPP
 }
 // compute_df
 Rcpp::NumericVector compute_df(const Rcpp::NumericVector& d_active_seq, const arma::mat& scalar_mat, const arma::mat& M_aug, double lambda_s, int n);
-RcppExport SEXP _truncatedFGLM_compute_df(SEXP d_active_seqSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP lambda_sSEXP, SEXP nSEXP) {
+RcppExport SEXP _FGLMtrunc_compute_df(SEXP d_active_seqSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP lambda_sSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -65,7 +65,7 @@ END_RCPP
 }
 // logisticSmPenalty
 Rcpp::List logisticSmPenalty(const arma::vec& Y, const arma::mat& scalar_mat, const arma::mat& M_aug, double lambda_s, const arma::vec& warmstart, double precision);
-RcppExport SEXP _truncatedFGLM_logisticSmPenalty(SEXP YSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP lambda_sSEXP, SEXP warmstartSEXP, SEXP precisionSEXP) {
+RcppExport SEXP _FGLMtrunc_logisticSmPenalty(SEXP YSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP lambda_sSEXP, SEXP warmstartSEXP, SEXP precisionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -81,7 +81,7 @@ END_RCPP
 }
 // logisticpiecePathCpp
 Rcpp::List logisticpiecePathCpp(const arma::vec& Y, int n, const arma::mat& scalar_mat, const arma::mat& M_aug, const arma::vec& warmStart, int nbasis, const arma::vec& weight, double lambda_s, double lambdaStart, int d_active, int p_scalar, int degree, double precision);
-RcppExport SEXP _truncatedFGLM_logisticpiecePathCpp(SEXP YSEXP, SEXP nSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP warmStartSEXP, SEXP nbasisSEXP, SEXP weightSEXP, SEXP lambda_sSEXP, SEXP lambdaStartSEXP, SEXP d_activeSEXP, SEXP p_scalarSEXP, SEXP degreeSEXP, SEXP precisionSEXP) {
+RcppExport SEXP _FGLMtrunc_logisticpiecePathCpp(SEXP YSEXP, SEXP nSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP warmStartSEXP, SEXP nbasisSEXP, SEXP weightSEXP, SEXP lambda_sSEXP, SEXP lambdaStartSEXP, SEXP d_activeSEXP, SEXP p_scalarSEXP, SEXP degreeSEXP, SEXP precisionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -104,15 +104,15 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_truncatedFGLM_linearSmPenalty", (DL_FUNC) &_truncatedFGLM_linearSmPenalty, 4},
-    {"_truncatedFGLM_linearpiecePathCpp", (DL_FUNC) &_truncatedFGLM_linearpiecePathCpp, 13},
-    {"_truncatedFGLM_compute_df", (DL_FUNC) &_truncatedFGLM_compute_df, 5},
-    {"_truncatedFGLM_logisticSmPenalty", (DL_FUNC) &_truncatedFGLM_logisticSmPenalty, 6},
-    {"_truncatedFGLM_logisticpiecePathCpp", (DL_FUNC) &_truncatedFGLM_logisticpiecePathCpp, 13},
+    {"_FGLMtrunc_linearSmPenalty", (DL_FUNC) &_FGLMtrunc_linearSmPenalty, 4},
+    {"_FGLMtrunc_linearpiecePathCpp", (DL_FUNC) &_FGLMtrunc_linearpiecePathCpp, 13},
+    {"_FGLMtrunc_compute_df", (DL_FUNC) &_FGLMtrunc_compute_df, 5},
+    {"_FGLMtrunc_logisticSmPenalty", (DL_FUNC) &_FGLMtrunc_logisticSmPenalty, 6},
+    {"_FGLMtrunc_logisticpiecePathCpp", (DL_FUNC) &_FGLMtrunc_logisticpiecePathCpp, 13},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_truncatedFGLM(DllInfo *dll) {
+RcppExport void R_init_FGLMtrunc(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

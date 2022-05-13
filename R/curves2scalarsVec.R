@@ -1,5 +1,4 @@
-
-#' @useDynLib truncatedFGLM
+#' @useDynLib FGLMtrunc
 curves2scalarsVecLinear <- function(X.curves, S, grid, nbasis, knots, degree) {
   diff_t_vec = diff(grid)
   eval_grid = grid[-1] - diff_t_vec/2
@@ -42,7 +41,7 @@ curves2scalarsVecLinear <- function(X.curves, S, grid, nbasis, knots, degree) {
 
 
 
-#' @useDynLib truncatedFGLM
+#' @useDynLib FGLMtrunc
 curves2scalarsVecLogistic <- function(X.curves, S, grid, nbasis, knots, degree) {
   diff_t_vec = diff(grid)
   eval_grid = grid[-1] - diff_t_vec/2

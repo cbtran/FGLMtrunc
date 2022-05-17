@@ -49,7 +49,7 @@ truncatedLogisticModelCpp <- function(Y,
   }
 
   registerDoParallel(numCores)
-  esti_list = foreach(i = 1:nlambda_s, .packages = c("FGLMtrunc")) %dopar%
+  esti_list = foreach(i = seq(nlambda_s), .packages = c("FGLMtrunc")) %dopar%
     logisticSolutionPath(Y, p.funcs, scalar_mat, xi_mat, nbasis, M_aug, lambda_s_seq[i], weight, degree, p.scalar, precision)
   on.exit(stopImplicitCluster())
   

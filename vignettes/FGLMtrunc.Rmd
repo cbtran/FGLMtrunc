@@ -7,7 +7,7 @@ output:
     number_sections: false
 vignette: >
   %\VignetteIndexEntry{FGLMtrunc}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -55,12 +55,15 @@ Please use `?fglm_trunc` for more details on function arguments. We will demonst
 
 ## Functional Linear Regression (`family="gaussian"`)
 Functional linear regression model is the default choice of function `fglm_trunc` with argument `family="gaussian"`.
-For illustration, we use dataset `LinearExample`, which we created beforehand following Case I in simulation studies section from Liu et. al. (2020). This dataset contains $n=200$ observations, and functional predictors are observed at $p=101$ timepoints on $[0,1]$ interval.
+For illustration, we use dataset `LinearExample`, which we created beforehand following Case I in simulation studies section from Liu et. al. (2020). This dataset contains $n=200$ observations, and functional predictors are observed at $p=101$ timepoints on $[0,1]$ interval. The true truncation point is $\delta = 0.54$.
 
-```{r}
+```{r, fig.align='center', fig.height=4, fig.width=4}
 data(LinearExample)
 Y_linear = LinearExample$Y
 Xcurves_linear = LinearExample$X.curves
+timeGrid = seq(0, 1, length.out = 101)
+plot(timeGrid, LinearExample$beta.true, type = 'l', 
+     main = 'True coefficient function', xlab = "t", ylab=expression(beta(t)))
 ```
 
 ### Fitting `FGLMtrunc` model for linear regression
@@ -72,7 +75,6 @@ fit = fglm_trunc(Y_linear, Xcurves_linear, nbasis = 50, num.cores = 2)
 
 One can also manually provides `grid` or `knots` sequences (or both). If `knots` is specified, `nbasis` will be ignored.
 ```{r, eval=F}
-timeGrid = seq(0, 1, length.out = 101)
 k <- 50 - 3 - 1 #Numbers of knots = nbasis - degree - 1
 knots_n <- seq(0, 1, length.out = k+2)[-c(1, k+2)] # Remove boundary knots
 fit2 = fglm_trunc(Y_linear, Xcurves_linear, grid = timeGrid, knots = knots_n, num.cores = 2)

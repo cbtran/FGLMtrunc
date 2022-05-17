@@ -1,6 +1,6 @@
 Package: FGLMtrunc
 Title: Truncated Functional Generalized Linear Models
-Version: 0.0.0.9000
+Version: 0.1.0
 Maintainer: Chau Tran <chautran@ucsb.edu>
 Author: Xi Liu
 Authors@R: c(

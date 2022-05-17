@@ -64,6 +64,7 @@ A list with components:
 \item{lambda.t}{Optimal truncation regularization parameter chosen by BIC.}
 \item{trunc.point}{Truncation point \eqn{\delta} where \eqn{\beta(t)} = 0 for \eqn{t \ge \delta}.}
 \item{alpha}{Intercept (and coefficients of scalar predictors if used) of truncated model.}
+\item{scalar.pred}{Logical variable indicating whether any scalar predictor was used.}
 }
 \description{
 Fit a truncated functional linear or logistic regression model using nested group lasso penalty.

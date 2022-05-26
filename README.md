@@ -4,7 +4,7 @@ The `FGLMtrunc` package contains implementation of the methodologies described i
 
 To install `FGLMtrunc` from github, type in R console
 ```R
-devtools::install_github("cbtran/FGLMtrunc", build_vignettes = TRUE)
+install.packages("FGLMtrunc")
 ```
 
 To read the `Introduction to the FGLMtrunc package` vignette, type in R console

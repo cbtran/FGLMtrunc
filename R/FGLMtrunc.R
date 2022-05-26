@@ -32,8 +32,7 @@
 #' @param nlambda.s (optional) Length of sequence of smoothing regularization parameters. Default 10.
 #' @param lambda.s.seq (optional) Sequence of smoothing regularization parameters.
 #' @param precision (optional) Error tolerance of the optimization. Default 1e-5.
-#' @param num.cores (optional) Number of cores for parallel.
-#' If not specified, the function will automatic choose the number of cores supported by the system.
+#' @param parallel (optional) If TRUE, use parallel \code{foreach} to fit each value of \code{lambda.s.seq}. Must register parallel before hand, such as doMC or others.
 #'
 #'
 #' @references Xi Liu, Afshin A. Divani, and Alexander Petersen. "Truncated estimation in functional generalized linear regression models" (2022). \emph{Computational Statistics & Data Analysis}.
@@ -53,6 +52,8 @@
 #' \item{trunc.point}{Truncation point \eqn{\delta} where \eqn{\beta(t)} = 0 for \eqn{t \ge \delta}.}
 #' \item{alpha}{Intercept (and coefficients of scalar predictors if used) of truncated model.}
 #' \item{scalar.pred}{Logical variable indicating whether any scalar predictor was used.}
+#' \item{call}{Function call of fitted model.}
+#' \item{family}{Choice of exponential family used.}
 #'
 #' @seealso \link[splines2]{bSpline} from \link[splines2]{splines2} R package for usage of B-spline basis.
 #'
@@ -60,28 +61,18 @@
 #' @import stats
 #' @importFrom graphics abline
 #' @import foreach
-#' @import parallel
-#' @import doParallel
 #' @importFrom splines2 bSpline
 #'
 #' @examples
+#' 
 #' # Gaussian response
 #' data(LinearExample)
 #' Y_linear = LinearExample$Y
 #' Xcurves_linear = LinearExample$X.curves
-#' # Used num.cores=2  for CRAN check
-#' fit1 = fglm_trunc(Y_linear, Xcurves_linear, nbasis = 50, num.cores=2)
+#' fit1 = fglm_trunc(Y_linear, Xcurves_linear, nbasis = 20, nlambda.s = 1)
 #' print(fit1)
 #' plot(fit1)
-#'
-#' # Bernoulli response
-#' data(LogisticExample)
-#' Y_logistic = LogisticExample$Y
-#' Xcurves_logistic = LogisticExample$X.curves
-#' fit2 = fglm_trunc(Y_logistic, Xcurves_logistic, family="binomial", nbasis = 50, num.cores=2)
-#' print(fit2)
-#' plot(fit2)
-#'
+#' 
 #' @export
 fglm_trunc <- function(
   Y,
@@ -95,7 +86,7 @@ fglm_trunc <- function(
   nlambda.s = 10,
   lambda.s.seq=NULL,
   precision = 1e-5,
-  num.cores = detectCores(logical=F) - 1){
+  parallel = FALSE){
 
   this.call=match.call()
   family = match.arg(family, family, several.ok = F)
@@ -122,8 +113,8 @@ fglm_trunc <- function(
   }
 
   fit <- switch(family,
-                "gaussian" = truncatedLinearModelCpp(Y, X.curves, S, grid, degree, nbasis, knots, lambda.s.seq, nlambda.s, precision, num.cores),
-                "binomial" = truncatedLogisticModelCpp(Y, X.curves, S, grid, degree, nbasis, knots, lambda.s.seq, nlambda.s, precision, num.cores)
+                "gaussian" = truncatedLinearModelCpp(Y, X.curves, S, grid, degree, nbasis, knots, lambda.s.seq, nlambda.s, precision, parallel),
+                "binomial" = truncatedLogisticModelCpp(Y, X.curves, S, grid, degree, nbasis, knots, lambda.s.seq, nlambda.s, precision, parallel)
                 )
   if (!is.null(S)){
     fit$scalar.pred <- TRUE

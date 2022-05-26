@@ -6,6 +6,7 @@
 #' @param x fitted \code{FGLMtrunc} object
 #' @param digits significant digits in printout
 #' @param \dots additional print arguments
+#' @return The fitted object is silently return.
 #' @method print FGLMtrunc
 #' @export
 print.FGLMtrunc <- function (x, digits = max(3, getOption("digits") - 3), ...) {
@@ -14,4 +15,5 @@ print.FGLMtrunc <- function (x, digits = max(3, getOption("digits") - 3), ...) {
     printCoefmat(data.frame(t(x$alpha) , row.names = ""))
   }
   cat("\nOptimal truncation point:", x$trunc.point, "\n")
+  invisible(x)
 }

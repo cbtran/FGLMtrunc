@@ -9,8 +9,8 @@ linearpiecePathCpp <- function(Y, n, scalar_mat, M_aug, warmStart, nbasis, weigh
     .Call('_FGLMtrunc_linearpiecePathCpp', PACKAGE = 'FGLMtrunc', Y, n, scalar_mat, M_aug, warmStart, nbasis, weight, lambda_s, lambdaStart, d_active, p_scalar, degree, precision)
 }
 
-compute_df <- function(d_active_seq, scalar_mat, M_aug, lambda_s, n) {
-    .Call('_FGLMtrunc_compute_df', PACKAGE = 'FGLMtrunc', d_active_seq, scalar_mat, M_aug, lambda_s, n)
+compute_df_linear <- function(d_active_seq, scalar_mat, M_aug, lambda_s, n) {
+    .Call('_FGLMtrunc_compute_df_linear', PACKAGE = 'FGLMtrunc', d_active_seq, scalar_mat, M_aug, lambda_s, n)
 }
 
 logisticSmPenalty <- function(Y, scalar_mat, M_aug, lambda_s, warmstart, precision = 1e-6) {
@@ -19,5 +19,9 @@ logisticSmPenalty <- function(Y, scalar_mat, M_aug, lambda_s, warmstart, precisi
 
 logisticpiecePathCpp <- function(Y, n, scalar_mat, M_aug, warmStart, nbasis, weight, lambda_s, lambdaStart, d_active, p_scalar, degree, precision = 1e-3) {
     .Call('_FGLMtrunc_logisticpiecePathCpp', PACKAGE = 'FGLMtrunc', Y, n, scalar_mat, M_aug, warmStart, nbasis, weight, lambda_s, lambdaStart, d_active, p_scalar, degree, precision)
+}
+
+compute_dim_beta_logistic <- function(U_aDU_a, hessian) {
+    .Call('_FGLMtrunc_compute_dim_beta_logistic', PACKAGE = 'FGLMtrunc', U_aDU_a, hessian)
 }
 

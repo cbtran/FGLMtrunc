@@ -13,7 +13,6 @@ logisticSolutionPath <- function(
   p.scalar,
   precision = 1e-4) {
 
-  ### find the starting lambda_t0
   n = length(Y)
 
   logisticfit0 = stats::glm(Y ~ 1, family = "binomial")$coef
@@ -87,12 +86,12 @@ logisticSolutionPath <- function(
     U_a = scalar_mat[, 1:d_active]
     M_a = M_aug[1:d_active, 1:d_active]
     theta_vec = scalar_mat %*% beta_path_mat[, change_index[j]]
+    
     b_prime = exp(theta_vec)/(1 + exp(theta_vec))
     b_2prime = b_prime*(1-b_prime)
-    hessian =  (t(U_a) %*% diag(as.vector(b_2prime)) %*% U_a) + n* lambda_s *M_a + n* M_t
-
-    dim_beta = sum(diag( solve(hessian)  %*% t(U_a) %*% diag(as.vector(b_2prime)) %*% U_a ))
-
+    U_aDU_a = t(U_a) %*% diag(as.vector(b_2prime)) %*% U_a
+    hessian = (U_aDU_a) + n* lambda_s *M_a + n* M_t
+    dim_beta = compute_dim_beta_logistic(U_aDU_a, hessian)
     b_theta = log(1 + exp(theta_vec))
     deviance_logistic = - 2* sum(Y*theta_vec - b_theta)
     bic = deviance_logistic + log(n)*dim_beta

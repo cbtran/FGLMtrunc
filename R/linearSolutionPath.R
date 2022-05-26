@@ -59,11 +59,12 @@ linearSolutionPath <- function(
   Y_true = matrix(rep(Y, dim(Y_pre)[2]), ncol = dim(Y_pre)[2])
   rss = colSums((Y_true - Y_pre)^2)
 
-  df_lambda_t = compute_df(d_active_seq,
-                           scalar_mat,
-                           M_aug,
-                           lambda_s,
-                           n)
+  df_lambda_t = compute_df_linear(d_active_seq,
+                                  scalar_mat,
+                                  M_aug,
+                                  lambda_s,
+                                  n)
+                           
   bic = n*log(rss/n) + df_lambda_t*log(n)
   bic.min.idx = which.min(bic)
   bic.min = bic[bic.min.idx]

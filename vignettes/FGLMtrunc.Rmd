@@ -7,7 +7,7 @@ output:
     number_sections: false
 vignette: >
   %\VignetteIndexEntry{FGLMtrunc}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -68,16 +68,22 @@ plot(timeGrid, LinearExample$beta.true, type = 'l',
 
 ### Fitting `FGLMtrunc` model for linear regression
 
-We fit the model using 50 B-spline basis with default `degree=3` for cubic splines. Since argument `grid` is not specified, an equally spaced sequence of length $p=101$ on $[0,1]$ interval (including boundaries) will automatically be used. `fglm_trunc` also supports parallel computing to speed up the running time of tuning regularization parameters. We will use `num.cores=2` throughout this vignette.
+We fit the model using 50 B-spline basis with default `degree=3` for cubic splines. Since argument `grid` is not specified, an equally spaced sequence of length $p=101$ on $[0,1]$ interval (including boundaries) will automatically be used.
 ```{r}
-fit = fglm_trunc(Y_linear, Xcurves_linear, nbasis = 50, num.cores = 2)
+fit = fglm_trunc(Y_linear, Xcurves_linear, nbasis = 50)
+```
+`fglm_trunc` also supports parallel computing to speed up the running time of tuning regularization parameters. Parallel backend must be registered before hand. Here is an example of using parallel with `doMC` backend (we cannot run the code here since it is not available for Windows) :
+```{r, eval=F}
+library(doMC)
+registerDoMC(cores = 2)
+fit = fglm_trunc(Y_linear, Xcurves_linear, nbasis = 50, parallel = TRUE)
 ```
 
 One can also manually provides `grid` or `knots` sequences (or both). If `knots` is specified, `nbasis` will be ignored.
 ```{r, eval=F}
 k <- 50 - 3 - 1 #Numbers of knots = nbasis - degree - 1
 knots_n <- seq(0, 1, length.out = k+2)[-c(1, k+2)] # Remove boundary knots
-fit2 = fglm_trunc(Y_linear, Xcurves_linear, grid = timeGrid, knots = knots_n, num.cores = 2)
+fit2 = fglm_trunc(Y_linear, Xcurves_linear, grid = timeGrid, knots = knots_n)
 ```
 
 `fit` and `fit2` fitted models will have the same results. 
@@ -120,7 +126,7 @@ Xcurves_logistic = LogisticExample$X.curves
 
 Similarly, we fit the model using 50 B-spline basis with default choice of cubic splines. We need to set `family="binomial"` for logistic regression. Printing and plotting are the same as before.
 ```{r}
-fit4 = fglm_trunc(Y_logistic, Xcurves_logistic, family="binomial", nbasis = 50, num.cores = 2)
+fit4 = fglm_trunc(Y_logistic, Xcurves_logistic, family="binomial", nbasis = 50)
 ```
 
 ```{r, fig.align='center', fig.height=4, fig.width=4}
@@ -167,7 +173,7 @@ Y_scalar <- Y_linear + (S %*% scalar_coef)
 Then we fit `FGLMtrunc` model with the matrix of scalar predictors `S`:
 
 ```{r}
-fit_scalar = fglm_trunc(X.curves=Xcurves_linear, Y=Y_scalar, S=S, nbasis = 50, num.cores = 2)
+fit_scalar = fglm_trunc(X.curves=Xcurves_linear, Y=Y_scalar, S=S, nbasis = 50)
 fit_scalar
 ```
 

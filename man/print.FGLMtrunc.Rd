@@ -13,6 +13,9 @@
 
 \item{\dots}{additional print arguments}
 }
+\value{
+The fitted object is silently return.
+}
 \description{
 Print a summary of truncation point of the fitted \code{FGLMtrunc} model.
 }

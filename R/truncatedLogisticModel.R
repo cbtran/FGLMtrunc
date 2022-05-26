@@ -9,7 +9,7 @@ truncatedLogisticModelCpp <- function(Y,
                                       lambda_s_seq,
                                       nlambda_s,
                                       precision,
-                                      numCores) {
+                                      parallel) {
   n = length(Y)
   if (!is.null(S)){
     p.scalar = ncol(S)
@@ -43,15 +43,20 @@ truncatedLogisticModelCpp <- function(Y,
 
   # step 3 determine optimal lambda_s and lambda_t #
   if (is.null(lambda_s_seq)) {
-    lambda_s_seq = seq(lambda_s0/n/50, lambda_s0/n/2, length.out = nlambda_s)
+    lambda_s_seq = seq(lambda_s0/n/20, lambda_s0/n/2, length.out = nlambda_s)
   } else {
     nlambda_s = length(lambda_s_seq)
   }
 
-  registerDoParallel(numCores)
-  esti_list = foreach(i = seq(nlambda_s), .packages = c("FGLMtrunc")) %dopar%
-    logisticSolutionPath(Y, p.funcs, scalar_mat, xi_mat, nbasis, M_aug, lambda_s_seq[i], weight, degree, p.scalar, precision)
-  on.exit(stopImplicitCluster())
+  esti_list = as.list(seq(nlambda_s))
+  if (parallel) {
+    esti_list = foreach(i = seq(nlambda_s), .packages = c("FGLMtrunc")) %dopar%
+      logisticSolutionPath(Y, p.funcs, scalar_mat, xi_mat, nbasis, M_aug, lambda_s_seq[i], weight, degree, p.scalar, precision)
+  } else {
+    for (i in seq(nlambda_s)) {
+      esti_list[[i]] = logisticSolutionPath(Y, p.funcs, scalar_mat, xi_mat, nbasis, M_aug, lambda_s_seq[i], weight, degree, p.scalar, precision)
+    }
+  }
   
   lambda_t_sse_vec = sapply(esti_list, get, x="bic")
   s_index = which.min(lambda_t_sse_vec)

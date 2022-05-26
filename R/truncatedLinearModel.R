@@ -9,7 +9,7 @@ truncatedLinearModelCpp <- function(Y,
                                     lambda_s_seq,
                                     nlambda_s,
                                     precision,
-                                    numCores) {
+                                    parallel) {
 
   n = length(Y)
   if (!is.null(S)){
@@ -46,11 +46,16 @@ truncatedLinearModelCpp <- function(Y,
   } else {
     nlambda_s = length(lambda_s_seq)
   }
-
-  registerDoParallel(numCores)
-  esti_list = foreach(i = seq(nlambda_s), .packages = c("FGLMtrunc")) %dopar%
-    linearSolutionPath(Y, scalar_mat, xi_mat, nbasis, M_aug, lambda_s_seq[i], weight, degree, p.scalar, precision)
-  on.exit(stopImplicitCluster())
+  esti_list = as.list(seq(nlambda_s))
+  if (parallel) {
+    esti_list = foreach(i = seq(nlambda_s), .packages = c("FGLMtrunc")) %dopar%
+      linearSolutionPath(Y, scalar_mat, xi_mat, nbasis, M_aug, lambda_s_seq[i], weight, degree, p.scalar, precision)
+  } else {
+    for (i in seq(nlambda_s)) {
+      esti_list[[i]] = linearSolutionPath(Y, scalar_mat, xi_mat, nbasis, M_aug, lambda_s_seq[i], weight, degree, p.scalar, precision)
+    }
+  }
+  
 
   lambda_t_sse_vec = sapply(esti_list, get, x="bic")
   s_index = which.min(lambda_t_sse_vec)

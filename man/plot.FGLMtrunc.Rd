@@ -13,6 +13,9 @@
 
 \item{\dots}{additional plot arguments}
 }
+\value{
+No return value.
+}
 \description{
 Plot functional parameters \eqn{\beta} as a function of \eqn{t} for a fitted
 \code{FGLMtrunc} object.

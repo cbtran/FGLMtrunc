@@ -12,7 +12,7 @@ Rcpp::List linearSmPenalty (const arma::vec& Y,
                             double lambda_s) {
 
   double n = Y.n_rows;
-  arma::mat invTemp = arma::inv_sympd(scalar_mat.t() * scalar_mat + (n * lambda_s) * M_aug) * scalar_mat.t();
+  arma::mat invTemp = arma::inv(scalar_mat.t() * scalar_mat + (n * lambda_s) * M_aug) * scalar_mat.t();
   arma::vec beta_vec = invTemp * Y;
   double df_lambda = arma::trace(scalar_mat * invTemp);
 
@@ -221,11 +221,11 @@ Rcpp::List linearpiecePathCpp (const arma::vec& Y,
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector compute_df (const Rcpp::NumericVector& d_active_seq,
-                                const arma::mat& scalar_mat,
-                                const arma::mat& M_aug,
-                                double lambda_s,
-                                int n) {
+Rcpp::NumericVector compute_df_linear (const Rcpp::NumericVector& d_active_seq,
+                                       const arma::mat& scalar_mat,
+                                       const arma::mat& M_aug,
+                                       double lambda_s,
+                                       int n) {
   Rcpp::NumericVector df_v;
   int l = d_active_seq.length();
   arma::mat U_a, M_a;
@@ -235,7 +235,7 @@ Rcpp::NumericVector compute_df (const Rcpp::NumericVector& d_active_seq,
     d_active = d_active_seq[i];
     U_a = scalar_mat.head_cols(d_active);
     M_a = M_aug.submat( 0, 0, d_active-1, d_active-1 );
-    tr = arma::trace(U_a * arma::inv_sympd(U_a.t() * U_a + n * lambda_s * M_a) * U_a.t());
+    tr = arma::trace(U_a * arma::inv(U_a.t() * U_a + n * lambda_s * M_a) * U_a.t());
     df_v.push_back(tr);
   }
   return df_v;
@@ -266,7 +266,7 @@ Rcpp::List logisticSmPenalty(const arma::vec& Y,
   while((arma::norm(grad, "fro") >  precision) && (iterCount < 1e3)) {
     b_2prime = b_prime % (1. - b_prime);
     b_2prime_diagmat = scalar_mat.t() * arma::diagmat(b_2prime) * scalar_mat;
-    hessianInv =  arma::inv_sympd(b_2prime_diagmat + lambda_s* M_aug);
+    hessianInv =  arma::inv(b_2prime_diagmat + lambda_s* M_aug);
     beta -= hessianInv * grad;
     theta_vec = scalar_mat * beta;
     b_prime = arma::exp(theta_vec) / (1. + arma::exp(theta_vec));
@@ -375,7 +375,7 @@ Rcpp::List logisticpiecePathCpp (const arma::vec& Y,
 
   double lambda_new = lambdaStart + delta_lambda;
   arma::vec beta_A = warmStart.head(d_active);
-  acceleratedGD_logistic(Y, n, X_active, M_mat_active, d_active, q_A, p_scalar, lambda_s, lambda_new , weight, beta_A, 10000);
+  acceleratedGD_logistic(Y, n, X_active, M_mat_active, d_active, q_A, p_scalar, lambda_s, lambda_new , weight, beta_A, 50000);
   arma::mat beta_A_mat(beta_A.n_rows, 1);
   beta_A_mat.col(0) = beta_A;
 
@@ -402,7 +402,7 @@ Rcpp::List logisticpiecePathCpp (const arma::vec& Y,
       delta_lambda = delta_lambda/5.;
     }
     lambda_new = lambda_new + delta_lambda;
-    acceleratedGD_logistic(Y, n, X_active, M_mat_active, d_active, q_A, p_scalar, lambda_s, lambda_new, weight, beta_A, 10000);
+    acceleratedGD_logistic(Y, n, X_active, M_mat_active, d_active, q_A, p_scalar, lambda_s, lambda_new, weight, beta_A, 50000);
     beta_A_mat = arma::join_rows(beta_A_mat, beta_A);
 
     dl_part2 = lambda_s * (M_aug * arma::join_cols(beta_A, arma::vec(scalar_mat.n_cols - d_active, arma::fill::zeros)));
@@ -424,7 +424,12 @@ Rcpp::List logisticpiecePathCpp (const arma::vec& Y,
                             Rcpp::Named("lambda_seq") = lambda_seq);
 }
 
-
+// [[Rcpp::export]]
+double compute_dim_beta_logistic (const arma::mat& U_aDU_a,
+                                  const arma::mat& hessian){
+  double dim_beta = arma::trace( arma::inv(hessian) * U_aDU_a );
+  return dim_beta;
+}
 
 
 

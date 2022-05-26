@@ -48,9 +48,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// compute_df
-Rcpp::NumericVector compute_df(const Rcpp::NumericVector& d_active_seq, const arma::mat& scalar_mat, const arma::mat& M_aug, double lambda_s, int n);
-RcppExport SEXP _FGLMtrunc_compute_df(SEXP d_active_seqSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP lambda_sSEXP, SEXP nSEXP) {
+// compute_df_linear
+Rcpp::NumericVector compute_df_linear(const Rcpp::NumericVector& d_active_seq, const arma::mat& scalar_mat, const arma::mat& M_aug, double lambda_s, int n);
+RcppExport SEXP _FGLMtrunc_compute_df_linear(SEXP d_active_seqSEXP, SEXP scalar_matSEXP, SEXP M_augSEXP, SEXP lambda_sSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -59,7 +59,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::mat& >::type M_aug(M_augSEXP);
     Rcpp::traits::input_parameter< double >::type lambda_s(lambda_sSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_df(d_active_seq, scalar_mat, M_aug, lambda_s, n));
+    rcpp_result_gen = Rcpp::wrap(compute_df_linear(d_active_seq, scalar_mat, M_aug, lambda_s, n));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -102,13 +102,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_dim_beta_logistic
+double compute_dim_beta_logistic(const arma::mat& U_aDU_a, const arma::mat& hessian);
+RcppExport SEXP _FGLMtrunc_compute_dim_beta_logistic(SEXP U_aDU_aSEXP, SEXP hessianSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type U_aDU_a(U_aDU_aSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type hessian(hessianSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_dim_beta_logistic(U_aDU_a, hessian));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_FGLMtrunc_linearSmPenalty", (DL_FUNC) &_FGLMtrunc_linearSmPenalty, 4},
     {"_FGLMtrunc_linearpiecePathCpp", (DL_FUNC) &_FGLMtrunc_linearpiecePathCpp, 13},
-    {"_FGLMtrunc_compute_df", (DL_FUNC) &_FGLMtrunc_compute_df, 5},
+    {"_FGLMtrunc_compute_df_linear", (DL_FUNC) &_FGLMtrunc_compute_df_linear, 5},
     {"_FGLMtrunc_logisticSmPenalty", (DL_FUNC) &_FGLMtrunc_logisticSmPenalty, 6},
     {"_FGLMtrunc_logisticpiecePathCpp", (DL_FUNC) &_FGLMtrunc_logisticpiecePathCpp, 13},
+    {"_FGLMtrunc_compute_dim_beta_logistic", (DL_FUNC) &_FGLMtrunc_compute_dim_beta_logistic, 2},
     {NULL, NULL, 0}
 };
 
